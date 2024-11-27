@@ -107,14 +107,24 @@ def updateDiscs(board, coordinate, color, opponent_color):
       for row, col in flip:
         board[row][col] = color
         
+# track board states that have already been evaluated
+transposition_table = {}
+
 # minimax algorithm
 def minimax(board, depth, is_max_player, color, alpha, beta):
+  # check if board state has already been evaluated
+  board_state = str(board)
+  if (board_state, depth, is_max_player) in transposition_table:
+    return transposition_table[(board_state, depth, is_max_player)]
+
   available_moves = mobility(board, color)
   if depth == 0 or available_moves == []:
-    return weightedHeuristic(board, BLACK_CIRCLE), None
+    result = (weightedHeuristic(board, BLACK_CIRCLE), None)
+    transposition_table[(board_state, depth, is_max_player)] = result
+    return result
   
   best_move = None
-  if is_max_player:  # AI = maximizing player
+  if is_max_player: 
     max_eval = float('-inf')
     for move in available_moves:  # test all possible moves
       new_board = [row.copy() for row in board]
@@ -127,8 +137,8 @@ def minimax(board, depth, is_max_player, color, alpha, beta):
       alpha = max(alpha, eval)
       if beta <= alpha:
         break
-    return max_eval, best_move
-  else:  # Player = minimizing player
+    result = (max_eval, best_move)
+  else:  
     min_eval = float('inf')
     for move in available_moves:
       new_board = [row.copy() for row in board]
@@ -141,20 +151,21 @@ def minimax(board, depth, is_max_player, color, alpha, beta):
       beta = min(beta, eval)
       if beta <= alpha:
         break
-    return min_eval, best_move
+    result = (min_eval, best_move)
+  # store result in transposition table
+  transposition_table[(board_state, depth, is_max_player)] = result
+  return result
   
 # get best move
 def getBestMove(board, depth):
   # initialize
   start_time = time.time()
-  best_move = None
-  
-  for depth in range(1, depth + 1):  # increment depth
-    elapsed_time = time.time() - start_time
-    if elapsed_time > 5:
+  # increment depth
+  for depth in range(1, depth + 1):  
+    time_taken = time.time() - start_time
+    if time_taken > 5:
       break
     _, move = minimax(board, depth, True, BLACK_CIRCLE, float('-inf'), float('inf'))
     if move is not None:
       best_move = move
-      
   return best_move
