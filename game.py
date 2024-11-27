@@ -1,5 +1,6 @@
 import board
 import time
+import ai
 
 board.initBoard()
 board.displayBoard()
@@ -35,18 +36,23 @@ while True:
     break
   
   # continue game
-  if player_turn:
+  if player_turn:  # player turn
     if player_moves == []:
       print('NO MOVES AVAILABLE. COMPUTER TURN.')
     else:
       if board.playerMove() is None:
         break
-  else:
+  else:  # computer turn
     time.sleep(1)
     if computer_moves == []:
       print('NO MOVES AVAILABLE. PLAYER TURN.')
     else:
-      board.computerMove()
+      move = ai.getBestMove(board.board, 3)  # max depth = 3 for now
+      print('COMPUTER MOVE: ', chr(move[1] + 65) + str(move[0] + 1))
+      board.board[move[0]][move[1]] = BLACK_CIRCLE
+      board.updateDiscs(move, BLACK_CIRCLE, WHITE_CIRCLE)
+      
+  # print updated board
   board.displayBoard()
   player_turn = not player_turn
   

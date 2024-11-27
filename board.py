@@ -1,18 +1,17 @@
 import random
 
-
 board = [[" " for i in range(8)] for j in range(8)]
 WHITE_CIRCLE = '●'
 BLACK_CIRCLE = '○'
 
 # initialize board
 def initBoard():
-  print('\nPlayer = WHITE (○), Computer = BLACK (●)')
+  print('\nPlayer = WHITE (●), Computer = BLACK (○)')
   print('Enter "quit" to end game')
   print('Enter move in format "A1"')
   board[3][3] = WHITE_CIRCLE
   board[4][4] = WHITE_CIRCLE
-  board[3][4] = BLACK_CIRCLE  # black discs
+  board[3][4] = BLACK_CIRCLE 
   board[4][3] = BLACK_CIRCLE
 
 # print out board with borders and discs
@@ -25,13 +24,6 @@ def displayBoard():
       print(board[i][j], end="|")
     print()
   print(' -----------------\n')
-  
-# computer move (random for now)
-def computerMove():
-  move = random.choice(getAvailableMoves(BLACK_CIRCLE))
-  print('COMPUTER MOVE: ', chr(move[1] + 65) + str(move[0] + 1))
-  board[move[0]][move[1]] = BLACK_CIRCLE
-  updateDiscs(move, BLACK_CIRCLE, WHITE_CIRCLE)
 
 # player move
 def playerMove():
@@ -50,7 +42,17 @@ def playerMove():
         print('[INVALID MOVE] Must be a valid move')
     else:
       print('[INVALID FORMAT] Must be in bounds and in format "A1"')
-      
+  
+# get available moves
+def getAvailableMoves(color):
+  moves = []
+  for i in range(8):
+    for j in range(8):
+      if board[i][j] == ' ':  # move must be on an empty space
+        if isValidMove(i, j, color):
+          moves.append((i, j))
+  return moves  # i = row, j = column
+
 # check if move is valid
 def isValidMove(row, col, color):
   opponent_color = BLACK_CIRCLE if color == WHITE_CIRCLE else WHITE_CIRCLE
@@ -70,16 +72,6 @@ def isValidMove(row, col, color):
     if opponent_piece and 0 <= new_i < 8 and 0 <= new_j < 8 and board[new_i][new_j] == color:
       return True
   return False
-  
-# get available moves
-def getAvailableMoves(color):
-  moves = []
-  for i in range(8):
-    for j in range(8):
-      if board[i][j] == ' ':  # move must be on an empty space
-        if isValidMove(i, j, color):
-          moves.append((i, j))
-  return moves  # i = row, j = column
 
 # update discs after turn
 def updateDiscs(coordinate, color, opponent_color):
