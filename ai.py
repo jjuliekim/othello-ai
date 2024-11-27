@@ -1,3 +1,5 @@
+import time
+
 # icons/colors for board
 WHITE_CIRCLE = '●'
 BLACK_CIRCLE = '○'
@@ -143,5 +145,16 @@ def minimax(board, depth, is_max_player, color, alpha, beta):
   
 # get best move
 def getBestMove(board, depth):
-  _, best_move = minimax(board, depth, True, BLACK_CIRCLE, float('-inf'), float('inf'))
+  # initialize
+  start_time = time.time()
+  best_move = None
+  
+  for depth in range(1, depth + 1):  # increment depth
+    elapsed_time = time.time() - start_time
+    if elapsed_time > 5:
+      break
+    _, move = minimax(board, depth, True, BLACK_CIRCLE, float('-inf'), float('inf'))
+    if move is not None:
+      best_move = move
+      
   return best_move
