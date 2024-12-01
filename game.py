@@ -5,7 +5,7 @@ import ai
 board.initBoard()
 board.displayBoard()
 
-player_turn = True  # False = computer move
+player_turn = True  # else, computer turn
 WHITE_CIRCLE = '●'
 BLACK_CIRCLE = '○'
 
@@ -20,6 +20,14 @@ def countPieces():
       elif board.board[i][j] == BLACK_CIRCLE:
         black += 1
   return white, black
+
+# start game
+print('Othello - Player vs. Computer')
+turn = input('Do you want to go first? (y/n): ').upper()
+while turn != 'Y' and turn != 'N':
+  turn = input('Do you want to go first? (y/n): ').upper()
+if turn == 'N':
+  player_turn = False
 
 while True:
   # check if game is over
@@ -47,7 +55,7 @@ while True:
     if computer_moves == []:
       print('NO MOVES AVAILABLE. PLAYER TURN.')
     else:
-      move = ai.getBestMove(board.board, 3)  # max depth = 3 for now
+      move = ai.getBestMove(board.board, 5)  # max depth = 5
       print('COMPUTER MOVE: ', chr(move[1] + 65) + str(move[0] + 1))
       board.board[move[0]][move[1]] = BLACK_CIRCLE
       board.updateDiscs(move, BLACK_CIRCLE, WHITE_CIRCLE)

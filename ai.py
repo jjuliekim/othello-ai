@@ -4,7 +4,7 @@ import time
 WHITE_CIRCLE = '●'
 BLACK_CIRCLE = '○'
 
-# weighted heuristic
+# weighted heuristic sum
 def weightedHeuristic(board, color):
   piece_score = piece_difference(board, color)
   corner_score = corner_control(board, color)
@@ -13,7 +13,7 @@ def weightedHeuristic(board, color):
   corner_adj_score = corner_adjacent(board, color)
   return piece_score + (corner_score * 5) + (edge_score * 3) + mobility_score + (corner_adj_score * 2)
 
-# + for player piece, - for opponent piece
+# +1 for player piece, -1 for opponent piece
 def piece_difference(board, color):
   count = 0
   for i in range(8):
@@ -58,7 +58,7 @@ def corner_adjacent(board, color):
       score += 1
   return score
   
-# get available moves
+# get all available moves
 def mobility(board, color):
   moves = []
   for i in range(8):
@@ -90,9 +90,9 @@ def isValidMove(board, row, col, color):
 
 # update discs after turn
 def updateDiscs(board, coordinate, color, opponent_color):
-  # flip discs in all directions
   directions = [(-1, 0), (1, 0), (0, -1), (0, 1),  # up, down, left, right
                 (-1, -1), (-1, 1), (1, -1), (1, 1)]  # diagonals
+  # flip discs in all directions
   for i, j in directions:
     new_i = coordinate[0] + i
     new_j = coordinate[1] + j
@@ -158,12 +158,12 @@ def minimax(board, depth, is_max_player, color, alpha, beta):
   
 # get best move
 def getBestMove(board, depth):
-  # initialize
+  # iterative deepening
   start_time = time.time()
-  # increment depth
   for depth in range(1, depth + 1):  
     time_taken = time.time() - start_time
     if time_taken > 5:
+      print('time limit reached')
       break
     _, move = minimax(board, depth, True, BLACK_CIRCLE, float('-inf'), float('inf'))
     if move is not None:
