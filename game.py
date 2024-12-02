@@ -47,6 +47,7 @@ while True:
   if player_turn:  # player turn
     if player_moves == []:
       print('NO MOVES AVAILABLE. COMPUTER TURN.')
+      time.sleep(1)
     else:
       if board.playerMove() is None:
         break

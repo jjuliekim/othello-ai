@@ -60,16 +60,16 @@ def isValidMove(row, col, color):
                 (-1, -1), (-1, 1), (1, -1), (1, 1)]  # diagonals
   # check all directions
   for i, j in directions:
-    new_i = row + i
-    new_j = col + j
+    next_i = row + i
+    next_j = col + j
     opponent_piece = False
     # check if there is an opponent piece in the direction
-    while 0 <= new_i < 8 and 0 <= new_j < 8 and board[new_i][new_j] == opponent_color:
-      new_i += i
-      new_j += j
+    while 0 <= next_i < 8 and 0 <= next_j < 8 and board[next_i][next_j] == opponent_color:
+      next_i += i
+      next_j += j
       opponent_piece = True
     # sequence has to end with player's piece
-    if opponent_piece and 0 <= new_i < 8 and 0 <= new_j < 8 and board[new_i][new_j] == color:
+    if opponent_piece and 0 <= next_i < 8 and 0 <= next_j < 8 and board[next_i][next_j] == color:
       return True
   return False
 
@@ -79,16 +79,16 @@ def updateDiscs(coordinate, color, opponent_color):
   directions = [(-1, 0), (1, 0), (0, -1), (0, 1),  # up, down, left, right
                 (-1, -1), (-1, 1), (1, -1), (1, 1)]  # diagonals
   for i, j in directions:
-    new_i = coordinate[0] + i
-    new_j = coordinate[1] + j
+    next_i = coordinate[0] + i
+    next_j = coordinate[1] + j
     flip = []
     # check if there is an opponent piece in the direction
-    while 0 <= new_i < 8 and 0 <= new_j < 8 and board[new_i][new_j] == opponent_color:
-      flip.append((new_i, new_j))
-      new_i += i
-      new_j += j
+    while 0 <= next_i < 8 and 0 <= next_j < 8 and board[next_i][next_j] == opponent_color:
+      flip.append((next_i, next_j))
+      next_i += i
+      next_j += j
     # if reaches player's piece, end search and flip pieces
-    if 0 <= new_i < 8 and 0 <= new_j < 8 and board[new_i][new_j] == color:
+    if 0 <= next_i < 8 and 0 <= next_j < 8 and board[next_i][next_j] == color:
       for row, col in flip:
         board[row][col] = color
     
