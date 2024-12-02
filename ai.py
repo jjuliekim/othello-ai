@@ -163,7 +163,6 @@ def getBestMove(board, depth):
   for depth in range(1, depth + 1):  
     time_taken = time.time() - start_time
     if time_taken > 5:
-      print('time limit reached')
       break
     _, move = minimax(board, depth, True, BLACK_CIRCLE, float('-inf'), float('inf'))
     if move is not None:
